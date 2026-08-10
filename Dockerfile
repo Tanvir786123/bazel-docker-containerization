@@ -21,11 +21,13 @@ RUN ln -sf /usr/bin/gcc-14 /usr/local/bin/gcc \
 # Install LLVM 21 and LLVM 22.
 RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key \
       | gpg --dearmor -o /usr/share/keyrings/llvm-archive-keyring.gpg \
-    && echo "deb [signed-by=/usr/share/keyrings/llvm-archive-keyring.gpg] http://apt.llvm.org/noble/ llvm-toolchain-noble-21 main" \
-      > /etc/apt/sources.list.d/llvm-21.list \
-    && echo "deb [signed-by=/usr/share/keyrings/llvm-archive-keyring.gpg] http://apt.llvm.org/noble/ llvm-toolchain-noble-22 main" \
-      > /etc/apt/sources.list.d/llvm-22.list \
-    && apt-get update \
+    && echo "deb [signed-by=/usr/share/keyrings/llvm-archive-keyring.gpg] " \
+            "http://apt.llvm.org/noble/ llvm-toolchain-noble-21 main" \
+    > /etc/apt/sources.list.d/llvm-21.list \
+    && echo "deb [signed-by=/usr/share/keyrings/llvm-archive-keyring.gpg] " \
+            "http://apt.llvm.org/noble/ llvm-toolchain-noble-22 main" \
+    > /etc/apt/sources.list.d/llvm-22.list \
+      && apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         --no-install-recommends \
         clang-21 \
