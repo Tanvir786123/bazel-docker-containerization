@@ -33,9 +33,11 @@ RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key \
         clang-21 \
         lld-21 \
         llvm-21 \
+        libclang-rt-21-dev \
         clang-22 \
         lld-22 \
         llvm-22 \
+        libclang-rt-22-dev \
     && ln -sf /usr/bin/llvm-symbolizer-22 /usr/local/bin/llvm-symbolizer \
     && rm -rf /var/lib/apt/lists/*
 
