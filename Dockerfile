@@ -14,7 +14,11 @@ RUN apt-get update \
         g++-14 \
     && rm -rf /var/lib/apt/lists/*
 
-# LLVM 21 + 22
+# Make GCC 14 the default compiler for Bazel host toolchain discovery.
+RUN ln -sf /usr/bin/gcc-14 /usr/local/bin/gcc \
+    && ln -sf /usr/bin/g++-14 /usr/local/bin/g++
+
+# Install LLVM 21 and LLVM 22.
 RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key \
       | gpg --dearmor -o /usr/share/keyrings/llvm-archive-keyring.gpg \
     && echo "deb [signed-by=/usr/share/keyrings/llvm-archive-keyring.gpg] http://apt.llvm.org/noble/ llvm-toolchain-noble-21 main" \
@@ -43,7 +47,9 @@ RUN test -x /usr/bin/gcc-12 \
     && test -x /usr/bin/ld.lld-21 \
     && test -x /usr/bin/clang-22 \
     && test -x /usr/bin/clang++-22 \
-    && test -x /usr/bin/ld.lld-22
+    && test -x /usr/bin/ld.lld-22 \
+    && test -x /usr/local/bin/gcc \
+    && test -x /usr/local/bin/g++
 
 ARG TARGETARCH
 ARG BAZELISK_VERSION=1.25.0
@@ -60,13 +66,16 @@ RUN case "$TARGETARCH" in \
     && chmod 0755 /usr/local/bin/bazelisk \
     && ln -sf /usr/local/bin/bazelisk /usr/local/bin/bazel
 
-# Route Bazel downloads through the internal Artifactory mirror.
 ENV BAZELISK_BASE_URL="${GITHUB_MIRROR}/bazelbuild/bazel/releases/download"
 
 # Configure sanitizer symbolization.
 ENV ASAN_SYMBOLIZER_PATH=/usr/local/bin/llvm-symbolizer
 ENV MSAN_SYMBOLIZER_PATH=/usr/local/bin/llvm-symbolizer
 ENV TSAN_OPTIONS="external_symbolizer_path=/usr/local/bin/llvm-symbolizer"
+
+# Avoid Bazel convenience symlink permission problems when /workspace
+# is bind-mounted from the host.
+ENV BAZEL_SYMLINK_PREFIX=/tmp/bazel-
 
 # Create an unprivileged runtime user.
 RUN groupadd --gid 10001 bazeluser \
@@ -79,10 +88,8 @@ RUN groupadd --gid 10001 bazeluser \
 
 WORKDIR /workspace
 
-# Allow the unprivileged user to use the image's default workspace.
 RUN chown bazeluser:bazeluser /workspace
 
-# Run the container as an unprivileged user.
 USER bazeluser
 
 ENTRYPOINT []
