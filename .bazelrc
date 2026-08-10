@@ -1,0 +1,14 @@
+build:asan --copt=-fsanitize=address
+build:asan --linkopt=-fsanitize=address
+
+build:lsan --copt=-fsanitize=leak
+build:lsan --linkopt=-fsanitize=leak
+
+build:msan --copt=-fsanitize=memory
+build:msan --linkopt=-fsanitize=memory
+
+build:tsan --copt=-fsanitize=thread
+build:tsan --linkopt=-fsanitize=thread
+
+build:ubsan --copt=-fsanitize=undefined
+build:ubsan --linkopt=-fsanitize=undefined
