@@ -12,9 +12,18 @@ load(
 load(
     "@rules_cc//cc:cc_toolchain_config_lib.bzl",
     "action_config",
+    "feature",
+    "flag_group",
+    "flag_set",
     "tool",
     "tool_path",
 )
+
+LINK_ACTIONS = [
+    ACTION_NAMES.cpp_link_executable,
+    ACTION_NAMES.cpp_link_dynamic_library,
+    ACTION_NAMES.cpp_link_nodeps_dynamic_library,
+]
 
 def _impl(ctx):
     tool_paths = [
@@ -104,6 +113,25 @@ def _impl(ctx):
         ),
     ]
 
+    features = [
+        feature(
+            name = "mold",
+            enabled = False,
+            flag_sets = [
+                flag_set(
+                    actions = LINK_ACTIONS,
+                    flag_groups = [
+                        flag_group(
+                            flags = [
+                                "-B" + ctx.file.mold_ld.dirname,
+                            ],
+                        ),
+                    ],
+                ),
+            ],
+        ),
+    ]
+
     return cc_common.create_cc_toolchain_config_info(
         ctx = ctx,
         toolchain_identifier = ctx.attr.toolchain_identifier,
@@ -116,6 +144,7 @@ def _impl(ctx):
         abi_libc_version = "local",
         tool_paths = tool_paths,
         action_configs = action_configs,
+        features = features,
         cxx_builtin_include_directories = ctx.attr.builtin_include_directories,
     )
 
@@ -125,6 +154,10 @@ cc_toolchain_config = rule(
         "compiler": attr.string(mandatory = True),
         "compiler_path": attr.string(mandatory = True),
         "cxx_compiler_path": attr.string(mandatory = True),
+        "mold_ld": attr.label(
+            mandatory = True,
+            allow_single_file = True,
+        ),
         "toolchain_identifier": attr.string(mandatory = True),
         "builtin_include_directories": attr.string_list(),
     },

@@ -7,6 +7,13 @@ filegroup(
     name = "empty",
 )
 
+filegroup(
+    name = "mold_files",
+    srcs = [
+        "@mold_prebuilt//:mold",
+    ],
+)
+
 # GCC 12
 
 cc_toolchain_config(
@@ -14,6 +21,7 @@ cc_toolchain_config(
     compiler = "gcc-12",
     compiler_path = "/usr/bin/gcc-12",
     cxx_compiler_path = "/usr/bin/g++-12",
+    mold_ld = "@mold_prebuilt//:mold_ld",
     toolchain_identifier = "gcc12",
     builtin_include_directories = [
         "/usr/lib/gcc/x86_64-linux-gnu/12/include",
@@ -31,7 +39,7 @@ cc_toolchain(
     toolchain_config = ":gcc12_config",
     all_files = ":empty",
     compiler_files = ":empty",
-    linker_files = ":empty",
+    linker_files = ":mold_files",
     dwp_files = ":empty",
     objcopy_files = ":empty",
     strip_files = ":empty",
@@ -60,6 +68,7 @@ cc_toolchain_config(
     compiler = "gcc-14",
     compiler_path = "/usr/bin/gcc-14",
     cxx_compiler_path = "/usr/bin/g++-14",
+    mold_ld = "@mold_prebuilt//:mold_ld",
     toolchain_identifier = "gcc14",
     builtin_include_directories = [
         "/usr/lib/gcc/x86_64-linux-gnu/14/include",
@@ -77,7 +86,7 @@ cc_toolchain(
     toolchain_config = ":gcc14_config",
     all_files = ":empty",
     compiler_files = ":empty",
-    linker_files = ":empty",
+    linker_files = ":mold_files",
     dwp_files = ":empty",
     objcopy_files = ":empty",
     strip_files = ":empty",
@@ -106,6 +115,7 @@ cc_toolchain_config(
     compiler = "clang-21",
     compiler_path = "/usr/bin/clang-21",
     cxx_compiler_path = "/usr/bin/clang++-21",
+    mold_ld = "@mold_prebuilt//:mold_ld",
     toolchain_identifier = "clang21",
     builtin_include_directories = [
         "/usr/lib/llvm-21/lib/clang/21/include",
@@ -124,7 +134,7 @@ cc_toolchain(
     toolchain_config = ":clang21_config",
     all_files = ":empty",
     compiler_files = ":empty",
-    linker_files = ":empty",
+    linker_files = ":mold_files",
     dwp_files = ":empty",
     objcopy_files = ":empty",
     strip_files = ":empty",
@@ -153,6 +163,7 @@ cc_toolchain_config(
     compiler = "clang-22",
     compiler_path = "/usr/bin/clang-22",
     cxx_compiler_path = "/usr/bin/clang++-22",
+    mold_ld = "@mold_prebuilt//:mold_ld",
     toolchain_identifier = "clang22",
     builtin_include_directories = [
         "/usr/lib/llvm-22/lib/clang/22/include",
@@ -171,7 +182,7 @@ cc_toolchain(
     toolchain_config = ":clang22_config",
     all_files = ":empty",
     compiler_files = ":empty",
-    linker_files = ":empty",
+    linker_files = ":mold_files",
     dwp_files = ":empty",
     objcopy_files = ":empty",
     strip_files = ":empty",
