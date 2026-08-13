@@ -12,3 +12,6 @@ build:tsan --linkopt=-fsanitize=thread
 
 build:ubsan --copt=-fsanitize=undefined
 build:ubsan --linkopt=-fsanitize=undefined
+
+
+build:mold --features=mold
