@@ -1,3 +1,5 @@
+"""Define a custom C++ toolchain configuration and Mold linker feature."""
+
 load(
     "@rules_cc//cc:action_names.bzl",
     "ACTION_NAMES",
