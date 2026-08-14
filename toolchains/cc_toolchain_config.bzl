@@ -1,14 +1,7 @@
 load(
-    "@rules_cc//cc:defs.bzl",
-    "CcToolchainConfigInfo",
-    "cc_common",
-)
-
-load(
     "@rules_cc//cc:action_names.bzl",
     "ACTION_NAMES",
 )
-
 load(
     "@rules_cc//cc:cc_toolchain_config_lib.bzl",
     "action_config",
@@ -17,6 +10,11 @@ load(
     "flag_set",
     "tool",
     "tool_path",
+)
+load(
+    "@rules_cc//cc:defs.bzl",
+    "CcToolchainConfigInfo",
+    "cc_common",
 )
 
 LINK_ACTIONS = [
